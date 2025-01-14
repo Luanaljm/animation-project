@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação de Coração</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+            color: white;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        h1 {
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            font-size: 32px;
+            color: #FF0000;
+            animation: fadeIn 2s ease-in-out infinite alternate;
+            top: 80%; /* Ajuste aqui para mover a frase para baixo */
+            transform: translateX(-50%);
+            left: 50%;
+            text-shadow: 
+                0 0 3px #FF0000, 
+                0 0 5px #FF0000, 
+                0 0 7px #FF0000; /* Efeito de brilho mais suave */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0.5;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Explore o poder do design e animação </h1>
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const colors = ['#FF0000', '#FF6347', '#FFA07A', '#FF69B4'];
+
+        function createHeartPoints() {
+            const heartPoints = [];
+            for (let t = 0; t < Math.PI * 2; t += 0.05) {
+                const x = 16 * Math.sin(t) ** 3;
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+                heartPoints.push({ x, y });
+            }
+            return heartPoints;
+        }
+
+        const heartPoints = createHeartPoints();
+
+        function Particle(x, y) {
+            this.x = x;
+            this.y = y;
+            this.size = Math.random() * 2 + 1;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.vx = Math.random() * 2 - 1;
+            this.vy = Math.random() * 2 - 1;
+
+            this.update = function () {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.size > 0.2) this.size -= 0.02;
+            };
+
+            this.draw = function () {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            };
+        }
+
+        function init() {
+            particles = [];
+            const scale = 15;
+            const offsetX = canvas.width / 2;
+            const offsetY = canvas.height / 2.5;
+
+            for (let i = 0; i < heartPoints.length; i++) {
+                const x = heartPoints[i].x * scale + offsetX;
+                const y = heartPoints[i].y * scale + offsetY;
+                for (let j = 0; j < 5; j++) {
+                    particles.push(new Particle(x, y));
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            if (particles.length === 0) init();
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+    </script>
+</body>
+</html>

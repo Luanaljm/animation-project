@@ -1,0 +1,83 @@
+/* Fundo da página */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Container do coração */
+  .heart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Forma do coração */
+  .heart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    transform: rotate(45deg);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px #800080, 0 0 40px #ff00ff, 0 0 60px #800080;
+  }
+  
+  /* Metade esquerda do coração */
+  .heart::before,
+  .heart::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #800080;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #800080, 0 0 40px #ff00ff, 0 0 60px #800080;
+  }
+  
+  /* Metade esquerda */
+  .heart::before {
+    top: 0;
+    left: 0;
+  }
+  
+  /* Metade direita */
+  .heart::after {
+    top: 0;
+    left: 50px;
+  }
+  
+  /* Efeito de pulsação */
+  @keyframes pulse {
+    0%, 100% {
+      transform: rotate(45deg) scale(1);
+    }
+    50% {
+      transform: rotate(45deg) scale(1.1);
+    }
+  }
+  
+  /* Texto dentro do coração */
+  .text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 10px #800080, 0 0 20px #ff00ff, 0 0 30px #800080;
+  }
+  
+  .text h1 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+  
+  .text p {
+    margin: 5px 0 0;
+    font-size: 1em;
+  }
+  
